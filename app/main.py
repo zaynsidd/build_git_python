@@ -23,17 +23,17 @@ def main():
             raw = zlib.decompress(f.read())
             header, content = raw.split(sep=b'\0', maxsplit=1)
             print(content.decode(encoding='utf-8'), end='')
-    elif command == 'hash-object':
+    elif command == 'hash-object' and sys.argv[2] == '-w':
         with open(sys.argv[3], 'r') as f:
             content = f.read()
-            header = f"blob {len(content)}\x00"
-            headed_content = header.encode('ascii') + content
-            hashed_sha = new(name='sha1', data = headed_content).hexdigest()
-            print(hashed_sha)
-            if sys.argv[2] == '-w':
-                os.mkdir('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:])
-                with open('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:], 'wb') as f2:
-                    f2.write(zlib.compress(content))
+        header = f"blob {len(content)}\x00"
+        headed_content = header.encode('ascii') + content
+        hashed_sha = new(name='sha1', data = headed_content).hexdigest()
+        print(hashed_sha)
+
+        os.mkdir('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:])
+        with open('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:], 'wb') as f2:
+            f2.write(zlib.compress(content))
                 
     else:
         raise RuntimeError(f"Unknown command #{command}")
