@@ -26,8 +26,9 @@ def main():
     elif command == 'hash-object':
         with open(sys.argv[3], 'r') as f:
             content = f.read()
-            content = ('blob ' + str(len(content))+'\0').encode('ascii')+content
-            hashed_sha = new(name='sha1', data = content).hexdigest()
+            header = f"blob {len(content)}\x00"
+            headed_content = header.encode('ascii') + content
+            hashed_sha = new(name='sha1', data = headed_content).hexdigest()
             print(hashed_sha)
             if sys.argv[2] == '-w':
                 os.mkdir('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:])
