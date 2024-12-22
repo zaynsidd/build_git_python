@@ -1,7 +1,7 @@
 import sys
 import os
 import zlib
-
+from hashlib import new
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -23,7 +23,12 @@ def main():
             raw = zlib.decompress(f.read())
             header, content = raw.split(sep=b'\0', maxsplit=1)
             print(content.decode(encoding='utf-8'), end='')
-        pass
+    elif command == 'hash-object':
+        hashed_val = sys.argv[3]
+        with open('.git/objects/'+str(hashed_val[:2])+'/'+str(hashed_val[2:]), 'rb') as f:
+            raw = zlib.decompress(f.read())
+            hashed_sha = new(name='sha1', data = raw)
+            print(hashed_sha)
     else:
         raise RuntimeError(f"Unknown command #{command}")
 
