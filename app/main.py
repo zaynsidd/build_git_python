@@ -29,11 +29,12 @@ def main():
         header = f"blob {len(content)}\x00"
         headed_content = header.encode('ascii') + content
         hashed_sha = new(name='sha1', data = headed_content).hexdigest()
-        print(hashed_sha)
+        print(hashed_sha, end='')
 
-        os.mkdir(os.getcwd()+'.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:])
-        with open(os.getcwd()+'.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:], 'wb') as f2:
-            f2.write(zlib.compress(content))
+        git_path = os.path.join(os.getcwd(),'.git/objects')
+        os.mkdir(os.path.join(git_path), hashed_sha[0:2])
+        with open(os.path.join(git_path, hashed_sha[0:2], hashed_sha[2:]), 'wb') as f:
+            f.write(zlib.compress(content))
                 
     else:
         raise RuntimeError(f"Unknown command #{command}")
