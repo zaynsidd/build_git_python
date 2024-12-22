@@ -1,5 +1,6 @@
 import sys
 import os
+import zlib
 
 
 def main():
@@ -16,6 +17,15 @@ def main():
         with open(".git/HEAD", "w") as f:
             f.write("ref: refs/heads/main\n")
         print("Initialized git directory")
+    elif command == 'cat-file' and sys.argv[2] == '-p':
+        hashed_val = sys.argv[3]
+        with open('.git/objects/'+str(hashed_val[:2])+'/'+str(hashed_val[2:]), 'rb') as f:
+            raw = zlib.decompress(f.read())
+            header, content = raw.split(sep='\0')
+            #blob, size = header.split(sep=' ')
+            #size = int(size)
+            print(content)
+        pass
     else:
         raise RuntimeError(f"Unknown command #{command}")
 
