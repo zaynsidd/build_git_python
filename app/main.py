@@ -34,7 +34,7 @@ def main():
         git_path = os.path.join(os.getcwd(),'.git/objects')
         os.mkdir(os.path.join(git_path), hashed_sha[0:2])
         with open(os.path.join(git_path, hashed_sha[0:2], hashed_sha[2:]), 'wb') as f:
-            f.write(zlib.compress(content))
+            f.write(zlib.compress(headed_content))
                 
     else:
         raise RuntimeError(f"Unknown command #{command}")
