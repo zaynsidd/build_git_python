@@ -24,7 +24,7 @@ def main():
             header, content = raw.split(sep=b'\0', maxsplit=1)
             print(content.decode(encoding='utf-8'), end='')
     elif command == 'hash-object' and sys.argv[2] == '-w':
-        with open(sys.argv[3], 'r') as f:
+        with open(sys.argv[3], 'rb') as f:
             content = f.read()
         header = f"blob {len(content)}\x00"
         headed_content = header.encode('ascii') + content
