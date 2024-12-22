@@ -26,7 +26,7 @@ def main():
     elif command == 'hash-object':
         with open(sys.argv[3], 'r') as f:
             content = f.read()
-            content = 'blob ' + len(content)+'\0'+content
+            content = 'blob ' + str(len(content))+'\0'+content
             hashed_sha = new(name='sha1', data = content)
             print(hashed_sha)
             if sys.argv[2] == '-w':
