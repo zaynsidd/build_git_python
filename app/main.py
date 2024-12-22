@@ -26,11 +26,13 @@ def main():
     elif command == 'hash-object':
         with open(sys.argv[3], 'r') as f:
             content = f.read()
-            content = 'blob ' + str(len(content))+'\0'+content
-            hashed_sha = new(name='sha1', data = content)
+            content = 'blob ' + str(len(content))+'\x00'+content
+            hashed_sha = new(name='sha1', data = content).hexdigest()
             print(hashed_sha)
             if sys.argv[2] == '-w':
                 os.mkdir('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:])
+                with open('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:], 'wb') as f2:
+                    f2.write(zlib.compress(content))
                 
     else:
         raise RuntimeError(f"Unknown command #{command}")
