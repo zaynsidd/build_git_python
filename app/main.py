@@ -24,11 +24,14 @@ def main():
             header, content = raw.split(sep=b'\0', maxsplit=1)
             print(content.decode(encoding='utf-8'), end='')
     elif command == 'hash-object':
-        hashed_val = sys.argv[3]
-        with open('.git/objects/'+str(hashed_val[:2])+'/'+str(hashed_val[2:]), 'rb') as f:
-            raw = zlib.decompress(f.read())
-            hashed_sha = new(name='sha1', data = raw)
+        with open(sys.argv[3], 'r') as f:
+            content = f.read()
+            content = 'blob ' + len(content)+'\0'+content
+            hashed_sha = new(name='sha1', data = content)
             print(hashed_sha)
+            if sys.argv[2] == '-w':
+                os.mkdir('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:])
+                
     else:
         raise RuntimeError(f"Unknown command #{command}")
 
