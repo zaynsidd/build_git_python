@@ -21,10 +21,8 @@ def main():
         hashed_val = sys.argv[3]
         with open('.git/objects/'+str(hashed_val[:2])+'/'+str(hashed_val[2:]), 'rb') as f:
             raw = zlib.decompress(f.read())
-            header, content = raw.split(sep='\0')
-            #blob, size = header.split(sep=' ')
-            #size = int(size)
-            print(content)
+            header, content = raw.split(sep=b'\0', maxsplit=1)
+            print(content.decode(encoding='utf-8'), end='')
         pass
     else:
         raise RuntimeError(f"Unknown command #{command}")
