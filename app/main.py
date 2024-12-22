@@ -31,8 +31,8 @@ def main():
         hashed_sha = new(name='sha1', data = headed_content).hexdigest()
         print(hashed_sha)
 
-        os.mkdir('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:])
-        with open('.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:], 'wb') as f2:
+        os.mkdir(os.getcwd()+'.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:])
+        with open(os.getcwd()+'.git/objects/'+hashed_sha[:2]+'/'+hashed_sha[2:], 'wb') as f2:
             f2.write(zlib.compress(content))
                 
     else:
